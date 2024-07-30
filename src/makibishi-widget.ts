@@ -1,6 +1,6 @@
 import { html } from "lit";
 
-export interface MakibishiProps {
+export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
   url?: string;
   /** The relays to which reactions are sent. It is recommended to set it, but if you are not sure, you can leave it blank. */
@@ -19,7 +19,7 @@ export interface MakibishiProps {
   customReactionName?: string;
 }
 
-export const Makibishi = (props: MakibishiProps) => {
+export const MakibishiWidget = (props: MakibishiWidgetProps) => {
   console.log(props);
   return html`wip`;
 };
