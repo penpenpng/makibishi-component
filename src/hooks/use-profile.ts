@@ -43,9 +43,9 @@ export const useProfile = (pubkey: string) => {
   return profile;
 };
 
-function toUserProfile(packet: EventPacket): UserProfile | null {
+function toUserProfile({ event }: EventPacket): UserProfile | null {
   try {
-    const profile: Nostr.Content.Metadata = JSON.parse(packet.event.content);
+    const profile: Nostr.Content.Metadata = JSON.parse(event.content);
 
     return {
       name:
@@ -55,7 +55,7 @@ function toUserProfile(packet: EventPacket): UserProfile | null {
         profile.displayName ??
         "",
       avatar: profile.picture ?? null,
-      page: `https://njump.me/${npubEncode(packet.event.pubkey)}`,
+      page: `https://njump.me/${npubEncode(event.pubkey)}`,
     };
   } catch {
     return null;

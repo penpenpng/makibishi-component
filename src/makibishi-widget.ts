@@ -1,10 +1,7 @@
-import { useEffect } from "haunted";
 import { html } from "lit";
-import { createRxBackwardReq, uniq } from "rx-nostr";
 
 import { Profile } from "./components/profile.js";
-import { useArrayState } from "./hooks/use-array-state.js";
-import { useNostrClient } from "./hooks/use-client.js";
+import { useReactions } from "./hooks/use-reactions.js";
 
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
@@ -26,30 +23,12 @@ export interface MakibishiWidgetProps {
 }
 
 export const MakibishiWidget = (props: MakibishiWidgetProps) => {
-  const client = useNostrClient();
-  const [reactions, pushReaction] = useArrayState<string>();
+  console.log(props);
 
-  useEffect(() => {
-    const req = createRxBackwardReq();
-    const sub = client
-      .use(req)
-      .pipe(uniq())
-      .subscribe(({ event }) => {
-        pushReaction(event.pubkey);
-      });
-
-    req.emit({
-      kinds: [17],
-      "#r": ["https://nikolat.github.io/makibishi-demo/"],
-    });
-    req.over();
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, []);
+  const reactions = useReactions();
 
   return html`${reactions.map(
-    (e) => html`<div>${e}, ${Profile({ pubkey: e })}</div>`,
+    ({ pubkey, content }) =>
+      html`<div>${content.kind}, ${Profile({ pubkey })}</div>`,
   )}`;
 };
