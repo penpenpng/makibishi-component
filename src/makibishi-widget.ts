@@ -2,8 +2,8 @@ import { useEffect } from "haunted";
 import { html } from "lit";
 import { createRxBackwardReq, uniq } from "rx-nostr";
 
-import { useNostrClient } from "./client.js";
 import { useArrayState } from "./hooks/use-array-state.js";
+import { useNostrClient } from "./hooks/use-client.js";
 
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
