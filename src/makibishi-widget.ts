@@ -2,6 +2,7 @@ import { useEffect } from "haunted";
 import { html } from "lit";
 import { createRxBackwardReq, uniq } from "rx-nostr";
 
+import { Profile } from "./components/profile.js";
 import { useArrayState } from "./hooks/use-array-state.js";
 import { useNostrClient } from "./hooks/use-client.js";
 
@@ -34,7 +35,7 @@ export const MakibishiWidget = (props: MakibishiWidgetProps) => {
       .use(req)
       .pipe(uniq())
       .subscribe(({ event }) => {
-        pushReaction(event.content);
+        pushReaction(event.pubkey);
       });
 
     req.emit({
@@ -48,5 +49,7 @@ export const MakibishiWidget = (props: MakibishiWidgetProps) => {
     };
   }, []);
 
-  return html`a${reactions.map((e) => html`<div>${e}</div>`)}`;
+  return html`${reactions.map(
+    (e) => html`<div>${e}, ${Profile({ pubkey: e })}</div>`,
+  )}`;
 };
