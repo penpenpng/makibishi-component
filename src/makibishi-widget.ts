@@ -1,4 +1,9 @@
+import { useEffect } from "haunted";
 import { html } from "lit";
+import { createRxBackwardReq, uniq } from "rx-nostr";
+
+import { useNostrClient } from "./client.js";
+import { useArrayState } from "./hooks/use-array-state.js";
 
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
@@ -20,6 +25,28 @@ export interface MakibishiWidgetProps {
 }
 
 export const MakibishiWidget = (props: MakibishiWidgetProps) => {
-  console.log(props);
-  return html`wip`;
+  const client = useNostrClient();
+  const [reactions, pushReaction] = useArrayState<string>();
+
+  useEffect(() => {
+    const req = createRxBackwardReq();
+    const sub = client
+      .use(req)
+      .pipe(uniq())
+      .subscribe(({ event }) => {
+        pushReaction(event.content);
+      });
+
+    req.emit({
+      kinds: [17],
+      "#r": ["https://nikolat.github.io/makibishi-demo/"],
+    });
+    req.over();
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+
+  return html`a${reactions.map((e) => html`<div>${e}</div>`)}`;
 };
