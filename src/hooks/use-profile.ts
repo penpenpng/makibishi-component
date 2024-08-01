@@ -3,8 +3,8 @@ import * as Nostr from "nostr-typedef";
 import { createRxBackwardReq, type EventPacket, latest, now } from "rx-nostr";
 import { filter, map } from "rxjs";
 
-import { npubEncode } from "../lib/npub-encode.js";
-import { useNostrClient } from "./use-client.js";
+import { npubEncode } from "../lib/npub-encode.ts";
+import { useNostrClient } from "./use-client.ts";
 
 export interface UserProfile {
   name: string;

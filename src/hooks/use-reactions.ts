@@ -1,10 +1,10 @@
 import { useEffect } from "haunted";
 import { createRxBackwardReq, type EventPacket, now, uniq } from "rx-nostr";
 
-import { getFirstCustomEmoji } from "../lib/get-custom-emoji.js";
-import { mapAsync } from "../operators/mapAsync.js";
-import { useArrayState } from "./use-array-state.js";
-import { useNostrClient } from "./use-client.js";
+import { getFirstCustomEmoji } from "../lib/get-custom-emoji.ts";
+import { mapAsync } from "../operators/mapAsync.ts";
+import { useArrayState } from "./use-array-state.ts";
+import { useNostrClient } from "./use-client.ts";
 
 export interface Reaction {
   pubkey: string;
