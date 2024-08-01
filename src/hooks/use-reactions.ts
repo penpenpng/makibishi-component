@@ -1,5 +1,11 @@
 import { useEffect } from "haunted";
-import { createRxBackwardReq, type EventPacket, now, uniq } from "rx-nostr";
+import {
+  createRxBackwardReq,
+  createRxForwardReq,
+  type EventPacket,
+  now,
+  uniq,
+} from "rx-nostr";
 
 import { getFirstCustomEmoji } from "../lib/get-custom-emoji.ts";
 import { mapAsync } from "../operators/mapAsync.ts";
@@ -27,14 +33,16 @@ export type ReactionContent =
 
 export interface UseReactionParams {
   url: string;
+  limit: number;
+  live: boolean;
 }
 
-export const useReactions = ({ url }: UseReactionParams) => {
+export const useReactions = ({ url, limit, live }: UseReactionParams) => {
   const client = useNostrClient();
   const [reactions, pushReaction] = useArrayState<Reaction>();
 
   useEffect(() => {
-    const req = createRxBackwardReq();
+    const req = live ? createRxForwardReq() : createRxBackwardReq();
     const sub = client
       .use(req)
       .pipe(uniq(), mapAsync(toReaction))
@@ -43,9 +51,12 @@ export const useReactions = ({ url }: UseReactionParams) => {
     req.emit({
       kinds: [17],
       "#r": [url],
-      until: now,
+      until: live ? undefined : now,
+      limit,
     });
-    req.over();
+    if ("over" in req) {
+      req.over();
+    }
 
     return () => {
       sub.unsubscribe();

@@ -15,8 +15,10 @@ export interface MakibishiWidgetProps {
   // relays?: string[];
   /** An emoji that is sent by users' reaction. It can be an URL for custom reaction. */
   // reaction?: string;
+  /** `limit` filter parameter to be sent to relays. */
+  limit?: number;
   /** If true, the reactions will be updated in real-time. For performance reasons, it is off by default. */
-  // live?: boolean;
+  live?: boolean;
   /** If true, the URL will not be normalized automatically. Usually you shouldn't do this. */
   disableUrlNormalization?: boolean;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
@@ -34,11 +36,17 @@ export const MakibishiWidgetElement = component(
     const {
       url: _url,
       displayedReactions,
+      limit,
+      live,
       disableUrlNormalization,
     } = setDefault(props, {
       url: window.location.href,
       displayedReactions: 5,
+      limit: 100,
+      live: false,
+      disableUrlNormalization: false,
     });
+
     const urlPostProcess: (url: string) => string = disableUrlNormalization
       ? (url) => url
       : normalizeUrl;
@@ -47,7 +55,7 @@ export const MakibishiWidgetElement = component(
     const isHere = urlPostProcess(window.location.href) === url;
     const buttonLabel = `React to ${isHere ? "this website" : url}.`;
 
-    const reactions = useReactions({ url });
+    const reactions = useReactions({ url, limit, live });
 
     return html`<slot name="button" @click=${() => console.log("clicked")}>
         <button part="button" aria-label=${buttonLabel}>default</button>
