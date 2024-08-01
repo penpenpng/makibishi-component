@@ -1,23 +1,76 @@
-import { useMemo } from "haunted";
+import { useEffect, useMemo } from "haunted";
 import { waitNostr } from "nip07-awaiter";
-import { createRxNostr } from "rx-nostr";
+import { createRxNostr, type RxNostr } from "rx-nostr";
 import { verifier } from "rx-nostr-crypto";
 
-const rxNostr = createRxNostr({
-  verifier,
-});
+import { getGlobalState } from "../lib/global-state.ts";
 
-rxNostr.addDefaultRelays(["wss://nos.lol"]);
+const isAlive = (client: RxNostr) => {
+  const state = getGlobalState();
 
-waitNostr(10000).then(async (nostr) => {
-  const relays = await nostr?.getRelays?.();
+  return state.clientWithRef?.client === client;
+};
 
-  if (relays) {
-    rxNostr.addDefaultRelays(relays);
-    console.log(relays);
+const createClient = () => {
+  console.log("create");
+  const rxNostr = createRxNostr({
+    verifier,
+  });
+
+  // for debug
+  rxNostr.addDefaultRelays(["wss://nos.lol"]);
+
+  waitNostr(10000).then(async (nostr) => {
+    if (!isAlive(rxNostr)) {
+      return;
+    }
+    const relays = await nostr?.getRelays?.();
+
+    if (isAlive(rxNostr) && relays) {
+      rxNostr.addDefaultRelays(relays);
+    }
+  });
+
+  return rxNostr;
+};
+
+const getNostrClient = (): Omit<RxNostr, "dispose"> => {
+  console.log("get");
+
+  const state = getGlobalState();
+  const clientWithRef =
+    state.clientWithRef ??
+    (state.clientWithRef = { ref: 0, client: createClient() });
+
+  clientWithRef.ref++;
+  console.log("ref", clientWithRef.ref);
+
+  return clientWithRef.client;
+};
+
+const releaseNostrClient = () => {
+  console.log("release");
+
+  const state = getGlobalState();
+  if (!state.clientWithRef) {
+    return;
   }
-});
+
+  state.clientWithRef.ref--;
+  if (state.clientWithRef.ref <= 0) {
+    const clientWithRef = state.clientWithRef;
+    state.clientWithRef = undefined;
+
+    clientWithRef.client.dispose();
+  }
+};
 
 export const useNostrClient = () => {
-  return useMemo(() => rxNostr, []);
+  const client = useMemo(getNostrClient, []);
+
+  useEffect(() => {
+    return releaseNostrClient;
+  }, []);
+
+  return client;
 };
