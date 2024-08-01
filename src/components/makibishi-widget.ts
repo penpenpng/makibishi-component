@@ -31,9 +31,12 @@ export const MakibishiWidgetElement = component(
 
     const reactions = useReactions();
 
-    return html`${reactions.map(
-      ({ pubkey, content }) =>
-        html`<div>${content.kind}, ${Profile({ pubkey })}</div>`,
-    )}`;
+    return html`<slot name="button" @click=${() => console.log("clicked")}
+        ><button>default</button></slot
+      >
+      ${reactions.map(
+        ({ pubkey, content }) =>
+          html` <div>${content.kind}, ${Profile({ pubkey })}</div>`,
+      )}`;
   },
 );
