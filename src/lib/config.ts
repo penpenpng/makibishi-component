@@ -4,7 +4,7 @@ type FilledConfig<C, D> = RequiredPart<C> & {
   [K in keyof OptionalPart<C>]: K extends keyof D ? NonNullable<C[K]> : C[K];
 };
 
-export const fill = <
+export const setDefault = <
   C,
   const D extends Partial<OptionalPart<C>> = Partial<OptionalPart<C>>,
 >(

@@ -2,7 +2,7 @@ import { html } from "lit";
 
 import { useReactions } from "../hooks/use-reactions.ts";
 import { component } from "../lib/component.ts";
-import { fill } from "../lib/config.ts";
+import { setDefault } from "../lib/config.ts";
 import { ReactionList } from "./private/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
@@ -34,7 +34,7 @@ const isHere = (url?: string) => {
 
 export const MakibishiWidgetElement = component(
   (props: MakibishiWidgetProps) => {
-    const { url, displayedReactions } = fill(props, {
+    const { url, displayedReactions } = setDefault(props, {
       displayedReactions: 5,
     });
 
