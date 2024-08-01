@@ -3,6 +3,7 @@ import { html } from "lit";
 import { useReactions } from "../hooks/use-reactions.ts";
 import { component } from "../lib/component.ts";
 import { setDefault } from "../lib/config.ts";
+import { normalizeUrl } from "../lib/normalize-url.ts";
 import { ReactionList } from "./private/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
@@ -17,7 +18,7 @@ export interface MakibishiWidgetProps {
   /** If true, the reactions will be updated in real-time. For performance reasons, it is off by default. */
   // live?: boolean;
   /** If true, the URL will not be normalized automatically. Usually you shouldn't do this. */
-  // disableUrlNormalization?: boolean;
+  disableUrlNormalization?: boolean;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   // requireNip07Sign?: boolean;
   /** By default, reactions will be sent to relays given by `url` and specified by NIP-07 `getRelays()`. But if the option is enabled, relays by NIP-07 are ignored. */
@@ -28,19 +29,25 @@ export interface MakibishiWidgetProps {
 
 export type MakibishiWidgetElement = MakibishiWidgetProps & HTMLElement;
 
-const isHere = (url?: string) => {
-  return !url || url === window.location.href;
-};
-
 export const MakibishiWidgetElement = component(
   (props: MakibishiWidgetProps) => {
-    const { url, displayedReactions } = setDefault(props, {
+    const {
+      url: _url,
+      displayedReactions,
+      disableUrlNormalization,
+    } = setDefault(props, {
+      url: window.location.href,
       displayedReactions: 5,
     });
-
     const reactions = useReactions();
 
-    const buttonLabel = `React to ${isHere(url) ? "this website" : url}.`;
+    const urlPostProcess: (url: string) => string = disableUrlNormalization
+      ? (url) => url
+      : normalizeUrl;
+    const url = urlPostProcess(_url);
+    const isHere = urlPostProcess(window.location.href) === url;
+
+    const buttonLabel = `React to ${isHere ? "this website" : url}.`;
 
     return html`<slot name="button" @click=${() => console.log("clicked")}>
         <button part="button" aria-label=${buttonLabel}>default</button>
