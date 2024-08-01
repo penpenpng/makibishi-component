@@ -39,15 +39,15 @@ export const MakibishiWidgetElement = component(
       url: window.location.href,
       displayedReactions: 5,
     });
-    const reactions = useReactions();
-
     const urlPostProcess: (url: string) => string = disableUrlNormalization
       ? (url) => url
       : normalizeUrl;
     const url = urlPostProcess(_url);
-    const isHere = urlPostProcess(window.location.href) === url;
 
+    const isHere = urlPostProcess(window.location.href) === url;
     const buttonLabel = `React to ${isHere ? "this website" : url}.`;
+
+    const reactions = useReactions({ url });
 
     return html`<slot name="button" @click=${() => console.log("clicked")}>
         <button part="button" aria-label=${buttonLabel}>default</button>

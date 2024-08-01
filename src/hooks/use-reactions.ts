@@ -25,7 +25,11 @@ export type ReactionContent =
       kind: "unknown";
     };
 
-export const useReactions = () => {
+export interface UseReactionParams {
+  url: string;
+}
+
+export const useReactions = ({ url }: UseReactionParams) => {
   const client = useNostrClient();
   const [reactions, pushReaction] = useArrayState<Reaction>();
 
@@ -38,7 +42,7 @@ export const useReactions = () => {
 
     req.emit({
       kinds: [17],
-      "#r": ["https://nikolat.github.io/makibishi-demo/"],
+      "#r": [url],
       until: now,
     });
     req.over();
