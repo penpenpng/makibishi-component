@@ -1,4 +1,4 @@
-import { MakibishiWidgetElement } from "./components";
+import { MakibishiWidgetElement } from "./components/index.ts";
 
 const ELEMENT_NAME = "makibishi-widget";
 
