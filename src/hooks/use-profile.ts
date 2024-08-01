@@ -53,7 +53,7 @@ function toUserProfile({ event }: EventPacket): UserProfile | null {
         profile.username ??
         profile.display_name ??
         profile.displayName ??
-        "",
+        "anonymous",
       avatar: profile.picture ?? null,
       page: `https://njump.me/${npubEncode(event.pubkey)}`,
     };

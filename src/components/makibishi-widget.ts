@@ -2,7 +2,7 @@ import { html } from "lit";
 
 import { useReactions } from "../hooks/use-reactions.ts";
 import { component } from "../lib/component.ts";
-import { Profile } from "./private/profile.ts";
+import { ReactionList } from "./private/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
@@ -25,18 +25,22 @@ export interface MakibishiWidgetProps {
 
 export type MakibishiWidgetElement = MakibishiWidgetProps & HTMLElement;
 
-export const MakibishiWidgetElement = component(
-  (props: MakibishiWidgetProps) => {
-    console.log(props);
+const isHere = (url?: string) => {
+  return !url || url === window.location.href;
+};
 
+export const MakibishiWidgetElement = component(
+  ({ url }: MakibishiWidgetProps) => {
     const reactions = useReactions();
 
-    return html`<slot name="button" @click=${() => console.log("clicked")}
-        ><button>default</button></slot
-      >
-      ${reactions.map(
-        ({ pubkey, content }) =>
-          html` <div>${content.kind}, ${Profile({ pubkey })}</div>`,
-      )}`;
+    const buttonLabel = `React to ${isHere(url) ? "this website" : url}.`;
+
+    return html`<slot name="button" @click=${() => console.log("clicked")}>
+        <button part="button" aria-label=${buttonLabel}>default</button>
+      </slot>
+
+      <span part="counter">${reactions.length}</span>
+
+      <div part="reaction-list">${ReactionList({ reactions })}</div> `;
   },
 );
