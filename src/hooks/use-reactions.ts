@@ -7,7 +7,7 @@ import {
   uniq,
 } from "rx-nostr";
 
-import { getFirstCustomEmoji } from "../lib/get-custom-emoji.ts";
+import { getFirstCustomEmoji } from "../lib/custom-emoji.ts";
 import { mapAsync } from "../operators/mapAsync.ts";
 import { useArrayState } from "./use-array-state.ts";
 import { useNostrClient } from "./use-client.ts";
@@ -18,6 +18,12 @@ export interface Reaction {
 }
 
 export type ReactionContent =
+  | {
+      kind: "+";
+    }
+  | {
+      kind: "-";
+    }
   | {
       kind: "native";
       emoji: string;

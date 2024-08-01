@@ -13,12 +13,7 @@ export const getFirstCustomEmoji = (
   try {
     const [, name, src] = emojiTag ?? [];
 
-    if (
-      typeof name === "string" &&
-      isValidCustomEmojiName(name) &&
-      typeof src === "string" &&
-      maybeUrl(src)
-    ) {
+    if (isValidCustomEmoji({ name, src })) {
       return {
         name,
         src,
@@ -29,10 +24,16 @@ export const getFirstCustomEmoji = (
   }
 };
 
-function isValidCustomEmojiName(name: string): boolean {
+export const isValidCustomEmojiName = (name: string): boolean => {
   return /^[a-zA-Z0-9_]+$/.test(name);
-}
+};
 
-function maybeUrl(url: string): boolean {
+export const maybeUrl = (url: string): boolean => {
   return url.startsWith("http");
-}
+};
+
+export const isValidCustomEmoji = ({ name, src }: CustomEmoji) =>
+  typeof name === "string" &&
+  isValidCustomEmojiName(name) &&
+  typeof src === "string" &&
+  maybeUrl(src);
