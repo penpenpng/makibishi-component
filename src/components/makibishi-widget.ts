@@ -25,7 +25,7 @@ export interface MakibishiWidgetProps {
   /** If true, the URL will not be normalized automatically. Usually you shouldn't do this. */
   disableUrlNormalization?: boolean;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
-  // requireNip07Sign?: boolean;
+  requireSignExtension?: boolean;
   /** By default, reactions will be sent to relays given by `url` and specified by NIP-07 `getRelays()`. But if the option is enabled, relays by NIP-07 are ignored. */
   // ignoreNip07RelayList?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
@@ -45,6 +45,7 @@ const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
   "limit",
   "live",
   "disable-url-normalization",
+  "require-sign-extension",
   "custom-reaction-name",
   "show-negative-reactions",
   "positive",
@@ -60,6 +61,7 @@ export const MakibishiWidgetElement = component(
       limit,
       live,
       disableUrlNormalization,
+      requireSignExtension,
       customReactionName,
       showNegativeReactions,
       positive,
@@ -71,6 +73,7 @@ export const MakibishiWidgetElement = component(
       limit: 100,
       live: false,
       disableUrlNormalization: false,
+      requireSignExtension: false,
       customReactionName: "custom_reaction",
       showNegativeReactions: false,
       positive: "👍",
@@ -89,6 +92,7 @@ export const MakibishiWidgetElement = component(
     return html`${ReactionButton({
       url,
       reaction,
+      requireSignExtension,
       customReactionName,
       urlPostProcess,
       onSuccess: live ? undefined : pushReaction,
