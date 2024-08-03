@@ -1,7 +1,7 @@
 import { html, nothing } from "lit";
 
-import { Reaction } from "../../hooks/use-reactions.ts";
-import { virtual } from "../../lib/virtual.ts";
+import { Reaction } from "../hooks/use-reactions.ts";
+import { virtual } from "../lib/virtual.ts";
 import { Avatar } from "./avatar.ts";
 import { ReactionContent } from "./reaction-content.ts";
 

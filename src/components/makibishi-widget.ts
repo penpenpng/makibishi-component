@@ -7,7 +7,7 @@ import { setDefault } from "../lib/config.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
 import { normalizeUrl } from "../lib/normalize-url.ts";
 import { KebabCase } from "../lib/types.ts";
-import { ReactionList } from "./private/reaction-list.ts";
+import { ReactionList } from "../private-components/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */

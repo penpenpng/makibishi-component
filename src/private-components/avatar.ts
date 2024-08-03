@@ -1,7 +1,7 @@
 import { html, nothing } from "lit";
 
-import { useProfile } from "../../hooks/use-profile.ts";
-import { virtual } from "../../lib/virtual.ts";
+import { useProfile } from "../hooks/use-profile.ts";
+import { virtual } from "../lib/virtual.ts";
 
 interface Props {
   pubkey: string;
