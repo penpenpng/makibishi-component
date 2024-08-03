@@ -1,9 +1,10 @@
 import { useEffect, useState } from "haunted";
 import { waitNostr } from "nip07-awaiter";
 
-export const useSignExtension = () => {
-  const [nostr, setNostr] =
-    useState<Awaited<ReturnType<typeof waitNostr>>>(undefined);
+type SignExtension = Awaited<ReturnType<typeof waitNostr>>;
+
+export const useSignExtension = (): SignExtension => {
+  const [nostr, setNostr] = useState<SignExtension>(undefined);
 
   useEffect(() => {
     waitNostr(10000)

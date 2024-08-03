@@ -1,13 +1,25 @@
 import { useCallback, useRef, useState } from "haunted";
 
-export const useArrayState = <E>(initialValue: E[] = []) => {
-  const [array, setArray] = useState<E[]>(initialValue);
-  const arrayRef = useRef<E[]>(initialValue);
+import { Reaction } from "../lib/reaction.ts";
 
-  const pushValue = useCallback((value: E) => {
+export const useSortedReactions = () => {
+  const arrayRef = useRef<Reaction[]>([]);
+  const [array, setArray] = useState<Reaction[]>(arrayRef.current);
+
+  const pushValue = useCallback((value: Reaction) => {
     arrayRef.current.push(value);
+    arrayRef.current.sort(
+      (a, b) => b.createdAt - a.createdAt || compareString(a.pubkey, b.pubkey),
+    );
+
     setArray(arrayRef.current);
   }, []);
 
   return [array, pushValue] as const;
+};
+
+const compareString = (a: string, b: string) => {
+  if (a === b) return 0;
+  else if (a < b) return -1;
+  else return 1;
 };

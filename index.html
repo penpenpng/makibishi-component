@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Makibishi Component Demo</title>
     <script type="module" src="/src/index.ts"></script>
+    <link rel="stylesheet" href="/index.css" />
   </head>
   <body>
     <makibishi-widget
       relays="wss://nos.lol;wss://yabu.me"
       url="https://example.com"
-      displayed-reactions="100"
+      displayed-reactions="3"
       disable-url-normalization
+      reaction="❤"
       limit="50"
     ></makibishi-widget>
   </body>

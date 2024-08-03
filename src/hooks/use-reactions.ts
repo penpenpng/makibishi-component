@@ -1,10 +1,10 @@
 import { useEffect } from "haunted";
 import { createRxBackwardReq, createRxForwardReq, now, uniq } from "rx-nostr";
 
-import { Reaction, toReaction } from "../lib/reaction.ts";
+import { toReaction } from "../lib/reaction.ts";
 import { getReadRelays } from "../lib/target-relays.ts";
 import { mapAsync } from "../operators/mapAsync.ts";
-import { useArrayState } from "./use-array-state.ts";
+import { useSortedReactions } from "./use-array-state.ts";
 import { useNostrClient } from "./use-client.ts";
 
 export interface UseReactionParams {
@@ -21,7 +21,7 @@ export const useReactions = ({
   live,
 }: UseReactionParams) => {
   const client = useNostrClient();
-  const [reactions, pushReaction] = useArrayState<Reaction>();
+  const [reactions, pushReaction] = useSortedReactions();
 
   useEffect(() => {
     const req = live ? createRxForwardReq() : createRxBackwardReq();

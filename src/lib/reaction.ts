@@ -5,6 +5,7 @@ import { getFirstCustomEmoji } from "./custom-emoji.ts";
 export interface Reaction {
   pubkey: string;
   content: ReactionContent;
+  createdAt: number;
 }
 
 export type ReactionContent =
@@ -28,15 +29,16 @@ export type ReactionContent =
     };
 
 export async function toReaction(event: Nostr.Event): Promise<Reaction> {
-  const pubkey = {
+  const rest = {
     pubkey: event.pubkey,
+    createdAt: event.created_at,
   };
 
   try {
     const customEmoji = getFirstCustomEmoji(event);
     if (customEmoji && (await isValidImage(customEmoji.src))) {
       return {
-        ...pubkey,
+        ...rest,
         content: {
           kind: "custom",
           ...customEmoji,
@@ -44,21 +46,21 @@ export async function toReaction(event: Nostr.Event): Promise<Reaction> {
       };
     } else if (event.content === "+") {
       return {
-        ...pubkey,
+        ...rest,
         content: {
           kind: "+",
         },
       };
     } else if (event.content === "-") {
       return {
-        ...pubkey,
+        ...rest,
         content: {
           kind: "-",
         },
       };
     } else {
       return {
-        ...pubkey,
+        ...rest,
         content: {
           kind: "native",
           // I know only the first latter should be used, but emoji is too complicated :(
@@ -68,7 +70,7 @@ export async function toReaction(event: Nostr.Event): Promise<Reaction> {
     }
   } catch {
     return {
-      ...pubkey,
+      ...rest,
       content: { kind: "unknown" },
     };
   }
