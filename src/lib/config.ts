@@ -10,8 +10,24 @@ export const setDefault = <
 >(
   config: C,
   defaults: D,
-): FilledConfig<C, D> =>
-  ({
+): FilledConfig<C, D> => {
+  const filled = {
     ...defaults,
     ...config,
-  }) as FilledConfig<C, D>;
+  } as FilledConfig<C, D>;
+
+  for (const _key in filled) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const key: keyof FilledConfig<C, D> = _key as any;
+
+    if (typeof defaults[key] === "number") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      filled[key] = Number(filled[key]) as any;
+    } else if (typeof defaults[key] === "boolean") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      filled[key] = !!filled[key] as any;
+    }
+  }
+
+  return filled;
+};
