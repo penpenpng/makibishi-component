@@ -1,4 +1,4 @@
 export {
-  MakibishiWidgetElement,
-  type MakibishiWidgetProps,
-} from "./makibishi-widget.ts";
+  MakibishiComponentElement,
+  type MakibishiComponentProps,
+} from "./makibishi-component.ts";

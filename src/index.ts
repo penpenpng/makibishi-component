@@ -1,1 +1,1 @@
-import "./makibishi-widget.ts";
+import "./makibishi-component.ts";

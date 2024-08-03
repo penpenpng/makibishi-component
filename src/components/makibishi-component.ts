@@ -9,7 +9,7 @@ import { ReactionButton } from "../private-components/reaction-button.ts";
 import { ReactionCounter } from "../private-components/reaction-counter.ts";
 import { ReactionList } from "../private-components/reaction-list.ts";
 
-export interface MakibishiWidgetProps {
+export interface MakibishiComponentProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
   url?: string;
   /** The relay URLs separated by semicolon to which reactions are sent. It is recommended to set it, but if you are not sure, you can leave it blank. */
@@ -36,7 +36,7 @@ export interface MakibishiWidgetProps {
   negative?: string;
 }
 
-const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
+const observedAttributes: Array<KebabCase<keyof MakibishiComponentProps>> = [
   "url",
   "relays",
   "reaction",
@@ -51,8 +51,8 @@ const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
   "negative",
 ];
 
-export const MakibishiWidgetElement = component(
-  (props: MakibishiWidgetProps) => {
+export const MakibishiComponentElement = component(
+  (props: MakibishiComponentProps) => {
     const {
       url: _url,
       relays: _relays,

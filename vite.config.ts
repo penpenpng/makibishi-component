@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: (_, name) => `${name}.js`,
       entry: {
         ["makibishi"]: entry("index.ts"),
-        ["makibishi-widget"]: entry("makibishi-widget.ts"),
+        ["makibishi-component"]: entry("makibishi-component.ts"),
         ["components/index"]: entry("components/index.ts"),
       },
       formats: ["es"],
