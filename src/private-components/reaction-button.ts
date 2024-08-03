@@ -1,3 +1,4 @@
+import { useState } from "haunted";
 import { html } from "lit";
 
 import { useReact } from "../hooks/use-react.ts";
@@ -17,7 +18,6 @@ export const ReactionButton = virtual(
     const isHere = urlPostProcess(window.location.href) === url;
     const buttonLabel = `React to ${isHere ? "this website" : url}.`;
 
-    // TODO: disabling in progress
     const react = useReact();
     const content: ReactionContent = (() => {
       if (reaction === "+") {
@@ -33,8 +33,34 @@ export const ReactionButton = virtual(
       }
     })();
 
-    return html`<slot name="button" @click=${() => react({ url, content })}>
-      <button part="button" aria-label=${buttonLabel}>default</button>
+    const [disabled, setDisabled] = useState(false);
+
+    const performReact = async () => {
+      // for aria-disabled
+      if (disabled) {
+        return;
+      }
+
+      setDisabled(true);
+
+      try {
+        const { success } = await react({ url, content });
+        if (success) {
+          // optimistic update
+        }
+      } finally {
+        setDisabled(false);
+      }
+    };
+
+    return html`<slot
+      name="button"
+      aria-disabled=${disabled ? "true" : undefined}
+      @click=${performReact}
+    >
+      <button part="button" aria-label=${buttonLabel} ?disabled=${disabled}>
+        default
+      </button>
     </slot>`;
   },
 );
