@@ -6,6 +6,7 @@ import { ReactionContent, useReactions } from "../hooks/use-reactions.ts";
 import { setDefault } from "../lib/config.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
 import { normalizeUrl } from "../lib/normalize-url.ts";
+import { KebabCase } from "../lib/types.ts";
 import { ReactionList } from "./private/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
@@ -30,6 +31,16 @@ export interface MakibishiWidgetProps {
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
 }
+
+const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
+  "url",
+  "reaction",
+  "displayed-reactions",
+  "limit",
+  "live",
+  "disable-url-normalization",
+  "custom-reaction-name",
+];
 
 export const MakibishiWidgetElement = component(
   (props: MakibishiWidgetProps) => {
@@ -87,4 +98,6 @@ export const MakibishiWidgetElement = component(
         ${ReactionList({ reactions, displayedReactions })}
       </div> `;
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { observedAttributes: observedAttributes as any },
 );
