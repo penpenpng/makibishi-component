@@ -1,8 +1,8 @@
+import { component } from "haunted";
 import { html } from "lit";
 
 import { useReact } from "../hooks/use-react.ts";
 import { ReactionContent, useReactions } from "../hooks/use-reactions.ts";
-import { component } from "../lib/component.ts";
 import { setDefault } from "../lib/config.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
 import { normalizeUrl } from "../lib/normalize-url.ts";
@@ -30,8 +30,6 @@ export interface MakibishiWidgetProps {
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
 }
-
-export type MakibishiWidgetElement = MakibishiWidgetProps & HTMLElement;
 
 export const MakibishiWidgetElement = component(
   (props: MakibishiWidgetProps) => {

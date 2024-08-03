@@ -1,4 +1,7 @@
-import { MakibishiWidgetElement } from "./components/index.ts";
+import {
+  MakibishiWidgetElement,
+  type MakibishiWidgetProps,
+} from "./components/index.ts";
 
 const ELEMENT_NAME = "makibishi-widget";
 
@@ -8,6 +11,6 @@ if (!customElements.get(ELEMENT_NAME)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [ELEMENT_NAME]: MakibishiWidgetElement;
+    [ELEMENT_NAME]: MakibishiWidgetProps & HTMLElement;
   }
 }
