@@ -1,4 +1,4 @@
-import { component, useCallback } from "haunted";
+import { component, useCallback, useMemo } from "haunted";
 import { html } from "lit";
 
 import { useReactions } from "../hooks/use-reactions.ts";
@@ -12,8 +12,8 @@ import { ReactionList } from "../private-components/reaction-list.ts";
 export interface MakibishiWidgetProps {
   /** The target URL to be reacted. If omitted, it will be the current location. */
   url?: string;
-  /** The relays to which reactions are sent. It is recommended to set it, but if you are not sure, you can leave it blank. */
-  // relays?: string[];
+  /** The relay URLs separated by semicolon to which reactions are sent. It is recommended to set it, but if you are not sure, you can leave it blank. */
+  relays?: string;
   /** An emoji that is sent by users' reaction. It can be an URL for custom reaction. */
   reaction?: string;
   /** Maximum number of reactions displayed without being omitted. */
@@ -26,8 +26,6 @@ export interface MakibishiWidgetProps {
   disableUrlNormalization?: boolean;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
-  /** By default, reactions will be sent to relays given by `url` and specified by NIP-07 `getRelays()`. But if the option is enabled, relays by NIP-07 are ignored. */
-  // ignoreNip07RelayList?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
   /** If true, negative reaction ('-') is allowed to be listed. */
@@ -40,6 +38,7 @@ export interface MakibishiWidgetProps {
 
 const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
   "url",
+  "relays",
   "reaction",
   "displayed-reactions",
   "limit",
@@ -56,6 +55,7 @@ export const MakibishiWidgetElement = component(
   (props: MakibishiWidgetProps) => {
     const {
       url: _url,
+      relays: _relays,
       reaction,
       displayedReactions,
       limit,
@@ -68,6 +68,7 @@ export const MakibishiWidgetElement = component(
       negative,
     } = setDefault(props, {
       url: window.location.href,
+      relays: "",
       reaction: "+",
       displayedReactions: 5,
       limit: 100,
@@ -80,6 +81,11 @@ export const MakibishiWidgetElement = component(
       negative: "👎",
     });
 
+    const relays = useMemo(
+      () => _relays.split(";").filter((u) => !!u),
+      [_relays],
+    );
+
     const urlPostProcess: (url: string) => string = useCallback(
       (url) =>
         (disableUrlNormalization ? (url: string) => url : normalizeUrl)(url),
@@ -87,9 +93,15 @@ export const MakibishiWidgetElement = component(
     );
     const url = urlPostProcess(_url);
 
-    const [reactions, pushReaction] = useReactions({ url, limit, live });
+    const [reactions, pushReaction] = useReactions({
+      relays,
+      url,
+      limit,
+      live,
+    });
 
     return html`${ReactionButton({
+      relays,
       url,
       reaction,
       requireSignExtension,
@@ -99,6 +111,7 @@ export const MakibishiWidgetElement = component(
     })}
     ${ReactionCounter({ count: reactions.length })}
     ${ReactionList({
+      relays,
       reactions,
       displayedReactions,
       showNegativeReactions,

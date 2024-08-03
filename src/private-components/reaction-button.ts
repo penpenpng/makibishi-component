@@ -8,6 +8,7 @@ import { Reaction, ReactionContent } from "../lib/reaction.ts";
 import { virtual } from "../lib/virtual.ts";
 
 interface Props {
+  relays: string[];
   url: string;
   reaction: string;
   customReactionName: string;
@@ -18,6 +19,7 @@ interface Props {
 
 export const ReactionButton = virtual(
   ({
+    relays,
     url,
     reaction,
     customReactionName,
@@ -56,7 +58,7 @@ export const ReactionButton = virtual(
       setProcessing(true);
 
       try {
-        const reaction = await react({ url, content });
+        const reaction = await react({ relays, url, content });
         if (reaction) {
           onSuccess?.(reaction);
         }

@@ -4,6 +4,7 @@ import { createRxBackwardReq, type EventPacket, latest, now } from "rx-nostr";
 import { filter, map } from "rxjs";
 
 import { npubEncode } from "../lib/npub-encode.ts";
+import { getReadRelays } from "../lib/target-relays.ts";
 import { useNostrClient } from "./use-client.ts";
 
 export interface UserProfile {
@@ -12,14 +13,19 @@ export interface UserProfile {
   page: string;
 }
 
-export const useProfile = (pubkey: string) => {
+export interface UseProfileParams {
+  pubkey: string;
+  relays: string[];
+}
+
+export const useProfile = ({ pubkey, relays }: UseProfileParams) => {
   const client = useNostrClient();
   const [profile, setProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const req = createRxBackwardReq();
     const sub = client
-      .use(req)
+      .use(req, { relays: getReadRelays(client, relays) })
       .pipe(
         latest(),
         map(toUserProfile),

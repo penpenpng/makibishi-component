@@ -6,6 +6,7 @@ import { Avatar } from "./avatar.ts";
 import { ReactionContent } from "./reaction-content.ts";
 
 interface Props {
+  relays: string[];
   reactions: Reaction[];
   displayedReactions: number;
   showNegativeReactions: boolean;
@@ -15,6 +16,7 @@ interface Props {
 
 export const ReactionList = virtual(
   ({
+    relays,
     reactions,
     displayedReactions,
     showNegativeReactions,
@@ -28,7 +30,7 @@ export const ReactionList = virtual(
           ? nothing
           : html`<div part="reaction">
               ${ReactionContent({ content, positive, negative })},
-              ${Avatar({ pubkey })}
+              ${Avatar({ pubkey, relays })}
             </div>`,
       )}`;
 

@@ -12,13 +12,9 @@ const isAlive = (client: RxNostr) => {
 };
 
 const createClient = () => {
-  console.log("create");
   const rxNostr = createRxNostr({
     verifier,
   });
-
-  // for debug
-  rxNostr.addDefaultRelays(["wss://nos.lol"]);
 
   waitNostr(10000).then(async (nostr) => {
     if (!isAlive(rxNostr)) {
@@ -35,22 +31,17 @@ const createClient = () => {
 };
 
 const getNostrClient = (): Omit<RxNostr, "dispose"> => {
-  console.log("get");
-
   const state = getGlobalState();
   const clientWithRef =
     state.clientWithRef ??
     (state.clientWithRef = { ref: 0, client: createClient() });
 
   clientWithRef.ref++;
-  console.log("ref", clientWithRef.ref);
 
   return clientWithRef.client;
 };
 
 const releaseNostrClient = () => {
-  console.log("release");
-
   const state = getGlobalState();
   if (!state.clientWithRef) {
     return;

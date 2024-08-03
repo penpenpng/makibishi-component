@@ -4,11 +4,12 @@ import { useProfile } from "../hooks/use-profile.ts";
 import { virtual } from "../lib/virtual.ts";
 
 interface Props {
+  relays: string[];
   pubkey: string;
 }
 
-export const Avatar = virtual(({ pubkey }: Props) => {
-  const profile = useProfile(pubkey);
+export const Avatar = virtual(({ pubkey, relays }: Props) => {
+  const profile = useProfile({ pubkey, relays });
   if (!profile?.avatar) {
     return nothing;
   }

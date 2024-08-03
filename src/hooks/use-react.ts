@@ -5,9 +5,11 @@ import { nip07Signer } from "rx-nostr";
 import { filter } from "rxjs";
 
 import { Reaction, ReactionContent, toReaction } from "../lib/reaction.ts";
+import { getWriteRelays } from "../lib/target-relays.ts";
 import { useNostrClient } from "./use-client.ts";
 
 export interface ReactParams {
+  relays: string[];
   url: string;
   content: ReactionContent;
 }
@@ -16,7 +18,11 @@ export const useReact = () => {
   const client = useNostrClient();
 
   return useCallback(
-    async ({ url, content }: ReactParams): Promise<Reaction | undefined> => {
+    async ({
+      url,
+      content,
+      relays,
+    }: ReactParams): Promise<Reaction | undefined> => {
       const nostr = getNostr();
       if (content.kind === "unknown" || !nostr) {
         return;
@@ -50,7 +56,7 @@ export const useReact = () => {
             .signEvent(params)
             .then((event) => {
               client
-                .send(event)
+                .send(event, { relays: getWriteRelays(client, relays) })
                 .pipe(filter(({ ok }) => ok))
                 .subscribe(() => {
                   resolve(toReaction(event));
