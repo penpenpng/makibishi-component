@@ -1,5 +1,5 @@
 import { component, useCallback, useMemo } from "haunted";
-import { html } from "lit";
+import { html, nothing } from "lit";
 
 import { useReactions } from "../hooks/use-reactions.ts";
 import { setDefault } from "../lib/config.ts";
@@ -24,6 +24,12 @@ export interface MakibishiComponentProps {
   live?: boolean;
   /** If true, the URL will not be normalized automatically. Usually you shouldn't do this. */
   disableUrlNormalization?: boolean;
+  /** If true, reaction button is hidden. */
+  hideReactionButton?: boolean;
+  /** If true, reaction counter is hidden. */
+  hideReactionCounter?: boolean;
+  /** If true, reaction contents and who made them are hidden. */
+  hideReactionList?: boolean;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
@@ -44,6 +50,9 @@ const observedAttributes: Array<KebabCase<keyof MakibishiComponentProps>> = [
   "limit",
   "live",
   "disable-url-normalization",
+  "hide-reaction-button",
+  "hide-reaction-counter",
+  "hide-reaction-list",
   "require-sign-extension",
   "custom-reaction-name",
   "show-negative-reactions",
@@ -61,6 +70,9 @@ export const MakibishiComponentElement = component(
       limit,
       live,
       disableUrlNormalization,
+      hideReactionButton,
+      hideReactionCounter,
+      hideReactionList,
       requireSignExtension,
       customReactionName,
       showNegativeReactions,
@@ -74,6 +86,9 @@ export const MakibishiComponentElement = component(
       limit: 100,
       live: false,
       disableUrlNormalization: false,
+      hideReactionButton: false,
+      hideReactionCounter: false,
+      hideReactionList: false,
       requireSignExtension: false,
       customReactionName: "custom_reaction",
       showNegativeReactions: false,
@@ -100,24 +115,30 @@ export const MakibishiComponentElement = component(
       live,
     });
 
-    return html`${ReactionButton({
-      relays,
-      url,
-      reaction,
-      requireSignExtension,
-      customReactionName,
-      urlPostProcess,
-      onSuccess: live ? undefined : pushReaction,
-    })}
-    ${ReactionCounter({ count: reactions.length })}
-    ${ReactionList({
-      relays,
-      reactions,
-      displayedReactions,
-      showNegativeReactions,
-      positive,
-      negative,
-    })}`;
+    return html`${hideReactionButton
+      ? nothing
+      : ReactionButton({
+          relays,
+          url,
+          reaction,
+          requireSignExtension,
+          customReactionName,
+          urlPostProcess,
+          onSuccess: live ? undefined : pushReaction,
+        })}
+    ${hideReactionCounter
+      ? nothing
+      : ReactionCounter({ count: reactions.length })}
+    ${hideReactionList
+      ? nothing
+      : ReactionList({
+          relays,
+          reactions,
+          displayedReactions,
+          showNegativeReactions,
+          positive,
+          negative,
+        })}`;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { observedAttributes: observedAttributes as any },
