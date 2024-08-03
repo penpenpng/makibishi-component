@@ -30,6 +30,8 @@ export interface MakibishiWidgetProps {
   // ignoreNip07RelayList?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
+  /** If true, negative reaction ('-') is allowed to be listed. */
+  showNegativeReactions?: boolean;
   /** A emoji displayed to express '+'. */
   positive?: string;
   /** A emoji displayed to express '-'. */
@@ -44,6 +46,7 @@ const observedAttributes: Array<KebabCase<keyof MakibishiWidgetProps>> = [
   "live",
   "disable-url-normalization",
   "custom-reaction-name",
+  "show-negative-reactions",
   "positive",
   "negative",
 ];
@@ -58,6 +61,7 @@ export const MakibishiWidgetElement = component(
       live,
       disableUrlNormalization,
       customReactionName,
+      showNegativeReactions,
       positive,
       negative,
     } = setDefault(props, {
@@ -68,6 +72,7 @@ export const MakibishiWidgetElement = component(
       live: false,
       disableUrlNormalization: false,
       customReactionName: "custom_reaction",
+      showNegativeReactions: false,
       positive: "👍",
       negative: "👎",
     });
@@ -92,6 +97,7 @@ export const MakibishiWidgetElement = component(
     ${ReactionList({
       reactions,
       displayedReactions,
+      showNegativeReactions,
       positive,
       negative,
     })}`;

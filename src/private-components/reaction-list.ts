@@ -8,20 +8,28 @@ import { ReactionContent } from "./reaction-content.ts";
 interface Props {
   reactions: Reaction[];
   displayedReactions: number;
+  showNegativeReactions: boolean;
   positive: string;
   negative: string;
 }
 
 export const ReactionList = virtual(
-  ({ reactions, displayedReactions, positive, negative }: Props) => {
+  ({
+    reactions,
+    displayedReactions,
+    showNegativeReactions,
+    positive,
+    negative,
+  }: Props) => {
     const list = html`${reactions
       .slice(0, displayedReactions)
-      .map(
-        ({ pubkey, content }) =>
-          html`<div part="reaction">
-            ${ReactionContent({ content, positive, negative })},
-            ${Avatar({ pubkey })}
-          </div>`,
+      .map(({ pubkey, content }) =>
+        !showNegativeReactions && content.kind === "-"
+          ? nothing
+          : html`<div part="reaction">
+              ${ReactionContent({ content, positive, negative })},
+              ${Avatar({ pubkey })}
+            </div>`,
       )}`;
 
     const ellipsis =
