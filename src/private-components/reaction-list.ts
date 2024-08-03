@@ -8,16 +8,19 @@ import { ReactionContent } from "./reaction-content.ts";
 interface Props {
   reactions: Reaction[];
   displayedReactions: number;
+  positive: string;
+  negative: string;
 }
 
 export const ReactionList = virtual(
-  ({ reactions, displayedReactions }: Props) => {
+  ({ reactions, displayedReactions, positive, negative }: Props) => {
     const list = html`${reactions
       .slice(0, displayedReactions)
       .map(
         ({ pubkey, content }) =>
           html`<div part="reaction">
-            ${ReactionContent({ content })}, ${Avatar({ pubkey })}
+            ${ReactionContent({ content, positive, negative })},
+            ${Avatar({ pubkey })}
           </div>`,
       )}`;
 

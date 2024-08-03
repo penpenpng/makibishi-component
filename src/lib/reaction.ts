@@ -42,6 +42,20 @@ export async function toReaction(event: Nostr.Event): Promise<Reaction> {
           ...customEmoji,
         },
       };
+    } else if (event.content === "+") {
+      return {
+        ...pubkey,
+        content: {
+          kind: "+",
+        },
+      };
+    } else if (event.content === "-") {
+      return {
+        ...pubkey,
+        content: {
+          kind: "-",
+        },
+      };
     } else {
       return {
         ...pubkey,
