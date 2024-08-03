@@ -69,13 +69,14 @@ export const MakibishiWidgetElement = component(
     );
     const url = urlPostProcess(_url);
 
-    const reactions = useReactions({ url, limit, live });
+    const [reactions, pushReaction] = useReactions({ url, limit, live });
 
     return html`${ReactionButton({
       url,
       reaction,
       customReactionName,
       urlPostProcess,
+      onSuccess: live ? undefined : pushReaction,
     })}
     ${ReactionCounter({ count: reactions.length })}
     ${ReactionList({

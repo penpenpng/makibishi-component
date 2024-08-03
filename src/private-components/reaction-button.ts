@@ -2,8 +2,8 @@ import { useState } from "haunted";
 import { html } from "lit";
 
 import { useReact } from "../hooks/use-react.ts";
-import { ReactionContent } from "../hooks/use-reactions.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
+import { Reaction, ReactionContent } from "../lib/reaction.ts";
 import { virtual } from "../lib/virtual.ts";
 
 interface Props {
@@ -11,10 +11,11 @@ interface Props {
   reaction: string;
   customReactionName: string;
   urlPostProcess: (url: string) => string;
+  onSuccess?: (reaction: Reaction) => void;
 }
 
 export const ReactionButton = virtual(
-  ({ url, reaction, customReactionName, urlPostProcess }: Props) => {
+  ({ url, reaction, customReactionName, urlPostProcess, onSuccess }: Props) => {
     const isHere = urlPostProcess(window.location.href) === url;
     const buttonLabel = `React to ${isHere ? "this website" : url}.`;
 
@@ -44,9 +45,9 @@ export const ReactionButton = virtual(
       setDisabled(true);
 
       try {
-        const { success } = await react({ url, content });
-        if (success) {
-          // optimistic update
+        const reaction = await react({ url, content });
+        if (reaction) {
+          onSuccess?.(reaction);
         }
       } finally {
         setDisabled(false);

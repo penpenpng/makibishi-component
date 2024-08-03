@@ -20,7 +20,10 @@ export const useReactions = ({ url, limit, live }: UseReactionParams) => {
     const req = live ? createRxForwardReq() : createRxBackwardReq();
     const sub = client
       .use(req)
-      .pipe(uniq(), mapAsync(toReaction))
+      .pipe(
+        uniq(),
+        mapAsync(({ event }) => toReaction(event)),
+      )
       .subscribe(pushReaction);
 
     req.emit({

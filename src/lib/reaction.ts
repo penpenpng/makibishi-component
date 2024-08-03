@@ -1,4 +1,4 @@
-import { type EventPacket } from "rx-nostr";
+import * as Nostr from "nostr-typedef";
 
 import { getFirstCustomEmoji } from "./custom-emoji.ts";
 
@@ -27,7 +27,7 @@ export type ReactionContent =
       kind: "unknown";
     };
 
-export async function toReaction({ event }: EventPacket): Promise<Reaction> {
+export async function toReaction(event: Nostr.Event): Promise<Reaction> {
   const pubkey = {
     pubkey: event.pubkey,
   };

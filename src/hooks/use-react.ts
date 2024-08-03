@@ -1,10 +1,11 @@
 import { useCallback } from "haunted";
 import { getNostr } from "nip07-awaiter";
 import * as Nostr from "nostr-typedef";
+import { nip07Signer } from "rx-nostr";
 import { filter } from "rxjs";
 
+import { Reaction, ReactionContent, toReaction } from "../lib/reaction.ts";
 import { useNostrClient } from "./use-client.ts";
-import { ReactionContent } from "./use-reactions.ts";
 
 export interface ReactParams {
   url: string;
@@ -15,13 +16,13 @@ export const useReact = () => {
   const client = useNostrClient();
 
   return useCallback(
-    async ({ url, content }: ReactParams): Promise<{ success: boolean }> => {
+    async ({ url, content }: ReactParams): Promise<Reaction | undefined> => {
       const nostr = getNostr();
       if (content.kind === "unknown" || !nostr) {
-        return { success: false };
+        return;
       }
 
-      const event: Nostr.EventParameters = {
+      const params: Nostr.EventParameters = {
         kind: 17,
         content: "",
         tags: [["r", url]],
@@ -29,33 +30,40 @@ export const useReact = () => {
 
       switch (content.kind) {
         case "+":
-          event.content = "+";
+          params.content = "+";
           break;
         case "-":
-          event.content = "-";
+          params.content = "-";
           break;
         case "native":
-          event.content = content.emoji;
+          params.content = content.emoji;
           break;
         case "custom":
-          event.content = `:${content.name}:`;
-          event.tags?.push(["emoji", content.name, content.src]);
+          params.content = `:${content.name}:`;
+          params.tags?.push(["emoji", content.name, content.src]);
           break;
       }
 
-      const success = await Promise.race([
-        new Promise<true>((resolve) => {
-          client
-            .send(event)
-            .pipe(filter(({ ok }) => ok))
-            .subscribe(() => {
-              resolve(true);
+      return Promise.race([
+        new Promise<Reaction | undefined>((resolve) => {
+          nip07Signer()
+            .signEvent(params)
+            .then((event) => {
+              client
+                .send(event)
+                .pipe(filter(({ ok }) => ok))
+                .subscribe(() => {
+                  resolve(toReaction(event));
+                });
+            })
+            .catch(() => {
+              resolve(undefined);
             });
         }),
-        new Promise<false>((resolve) => setTimeout(() => resolve(false), 5000)),
+        new Promise<undefined>((resolve) =>
+          setTimeout(() => resolve(undefined), 5000),
+        ),
       ]);
-
-      return { success };
     },
     [],
   );
