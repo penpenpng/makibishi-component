@@ -1,6 +1,6 @@
 import { html, nothing } from "lit";
 
-import { ReactionContent as Content } from "../hooks/use-reactions.ts";
+import { ReactionContent as Content } from "../lib/reaction.ts";
 import { virtual } from "../lib/virtual.ts";
 
 interface Props {
