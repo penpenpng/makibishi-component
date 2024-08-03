@@ -26,6 +26,6 @@ export const ReactionList = virtual(
         ? html`<span part="ellipsis">...</span>`
         : nothing;
 
-    return html`${list}${ellipsis}`;
+    return html`<div part="reaction-list">${list}${ellipsis}</div>`;
   },
 );

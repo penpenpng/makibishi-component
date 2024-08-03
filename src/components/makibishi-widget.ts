@@ -7,6 +7,8 @@ import { setDefault } from "../lib/config.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
 import { normalizeUrl } from "../lib/normalize-url.ts";
 import { KebabCase } from "../lib/types.ts";
+import { ReactionButton } from "../private-components/reaction-button.ts";
+import { ReactionCounter } from "../private-components/reaction-counter.ts";
 import { ReactionList } from "../private-components/reaction-list.ts";
 
 export interface MakibishiWidgetProps {
@@ -67,36 +69,19 @@ export const MakibishiWidgetElement = component(
       : normalizeUrl;
     const url = urlPostProcess(_url);
 
-    const isHere = urlPostProcess(window.location.href) === url;
-    const buttonLabel = `React to ${isHere ? "this website" : url}.`;
-
     const reactions = useReactions({ url, limit, live });
 
-    // TODO: disabling in progress
-    const react = useReact();
-    const content: ReactionContent = (() => {
-      if (reaction === "+") {
-        return { kind: "+" };
-      } else if (reaction === "-") {
-        return { kind: "-" };
-      } else if (
-        isValidCustomEmoji({ name: customReactionName, src: reaction })
-      ) {
-        return { kind: "custom", name: customReactionName, src: reaction };
-      } else {
-        return { kind: "native", emoji: reaction };
-      }
-    })();
-
-    return html`<slot name="button" @click=${() => react({ url, content })}>
-        <button part="button" aria-label=${buttonLabel}>default</button>
-      </slot>
-
-      <span part="counter">${reactions.length}</span>
-
-      <div part="reaction-list">
-        ${ReactionList({ reactions, displayedReactions })}
-      </div> `;
+    return html`${ReactionButton({
+      url,
+      disableUrlNormalization,
+      reaction,
+      customReactionName,
+    })}
+    ${ReactionCounter({ count: reactions.length })}
+    ${ReactionList({
+      reactions,
+      displayedReactions,
+    })}`;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { observedAttributes: observedAttributes as any },
