@@ -1,24 +1,19 @@
-import { virtual } from "haunted";
 import { html } from "lit";
 
 import { useReact } from "../hooks/use-react.ts";
 import { ReactionContent } from "../hooks/use-reactions.ts";
 import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
-import { normalizeUrl } from "../lib/normalize-url.ts";
+import { virtual } from "../lib/virtual.ts";
 
 interface Props {
   url: string;
-  disableUrlNormalization: boolean;
   reaction: string;
   customReactionName: string;
+  urlPostProcess: (url: string) => string;
 }
 
 export const ReactionButton = virtual(
-  ({ url, disableUrlNormalization, reaction, customReactionName }: Props) => {
-    const urlPostProcess: (url: string) => string = disableUrlNormalization
-      ? (url) => url
-      : normalizeUrl;
-
+  ({ url, reaction, customReactionName, urlPostProcess }: Props) => {
     const isHere = urlPostProcess(window.location.href) === url;
     const buttonLabel = `React to ${isHere ? "this website" : url}.`;
 

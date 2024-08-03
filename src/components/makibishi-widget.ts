@@ -1,10 +1,8 @@
-import { component } from "haunted";
+import { component, useCallback } from "haunted";
 import { html } from "lit";
 
-import { useReact } from "../hooks/use-react.ts";
-import { ReactionContent, useReactions } from "../hooks/use-reactions.ts";
+import { useReactions } from "../hooks/use-reactions.ts";
 import { setDefault } from "../lib/config.ts";
-import { isValidCustomEmoji } from "../lib/custom-emoji.ts";
 import { normalizeUrl } from "../lib/normalize-url.ts";
 import { KebabCase } from "../lib/types.ts";
 import { ReactionButton } from "../private-components/reaction-button.ts";
@@ -64,18 +62,20 @@ export const MakibishiWidgetElement = component(
       customReactionName: "custom_reaction",
     });
 
-    const urlPostProcess: (url: string) => string = disableUrlNormalization
-      ? (url) => url
-      : normalizeUrl;
+    const urlPostProcess: (url: string) => string = useCallback(
+      (url) =>
+        (disableUrlNormalization ? (url: string) => url : normalizeUrl)(url),
+      [disableUrlNormalization],
+    );
     const url = urlPostProcess(_url);
 
     const reactions = useReactions({ url, limit, live });
 
     return html`${ReactionButton({
       url,
-      disableUrlNormalization,
       reaction,
       customReactionName,
+      urlPostProcess,
     })}
     ${ReactionCounter({ count: reactions.length })}
     ${ReactionList({
