@@ -50,8 +50,6 @@ export const ReactionButton = virtual(
     const disabled = processing || (requireSignExtension && !extension);
 
     const performReact = async () => {
-      return;
-
       if (disabled) {
         return;
       }
