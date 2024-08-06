@@ -40,6 +40,7 @@ export interface MakibishiComponentProps {
   customReactionSize?: number;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
+  /** If true, send reaction as an anonymous user even if NIP-07 extension is found. */
   forceAnonymous?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
