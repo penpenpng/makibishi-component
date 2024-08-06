@@ -23,10 +23,6 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Update release draft for rx-nostr
-        uses: release-drafter/release-drafter@v6
-        with:
-          config-name: release-drafter/rx-nostr.yml
       - name: Update release draft
         uses: release-drafter/release-drafter@v6
         with:
