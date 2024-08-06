@@ -39,7 +39,7 @@ Then, put the following code anywhere you want.
   <dt>reaction</dt>
   <dd>An emoji that is sent by users' reaction. It can be an URL for custom reaction.</dd>
 
-  <dt>displayedReactions</dt>
+  <dt>displayed-reactions</dt>
   <dd>Maximum number of reactions displayed without being omitted.</dd>
 
   <dt>limit</dt>
@@ -48,40 +48,40 @@ Then, put the following code anywhere you want.
   <dt>If set, the reactions will be updated in real-time. For performance reasons, it is off by default.</dt>
   <dd>live</dd>
 
-  <dt>disableUrlNormalization</dt>
+  <dt>disable-url-normalization</dt>
   <dd>If set, the URL will not be normalized automatically. Usually you shouldn't do this.</dd>
 
-  <dt>hideReactionButton</dt>
+  <dt>hide-reaction-button</dt>
   <dd>If set, reaction button is hidden.</dd>
 
-  <dt>hideReactionCounter</dt>
+  <dt>hide-reaction-counter</dt>
   <dd>If set, reaction counter is hidden.</dd>
 
-  <dt>hideReactionList</dt>
+  <dt>hide-reaction-list</dt>
   <dd>If set, reaction contents and who made them are hidden.</dd>
 
-  <dt>hideReactionContent</dt>
+  <dt>hide-reaction-content</dt>
   <dd>If set, emojis or custom reaction images are hidden.</dd>
 
-  <dt>hideAvatar</dt>
+  <dt>hide-avatar</dt>
   <dd>If set, avatar images are hidden.</dd>
 
-  <dt>avatarSize</dt>
+  <dt>avatar-size</dt>
   <dd>Avatars' width and height. It will be set into img's attribute.</dd>
 
-  <dt>customReactionSize</dt>
+  <dt>custom-reaction-size</dt>
   <dd>Custom reactions' width and height. It will be set into img's attribute.</dd>
 
-  <dt>requireSignExtension</dt>
+  <dt>require-sign-extension</dt>
   <dd>By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction.</dd>
 
-  <dt>forceAnonymous</dt>
+  <dt>force-anonymous</dt>
   <dd>If set, send reaction as an anonymous user even if NIP-07 extension is found.</dd>
 
-  <dt>customReactionName</dt>
+  <dt>custom-reaction-name</dt>
   <dd>If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required.</dd>
 
-  <dt>showNegativeReactions</dt>
+  <dt>show-negative-reactions</dt>
   <dd>If set, negative reaction ('-') is allowed to be listed.</dd>
 
   <dt>positive</dt>
