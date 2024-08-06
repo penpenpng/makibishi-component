@@ -10,7 +10,7 @@ const createClient = () => {
   });
 
   // Fallback relay
-  rxNostr.addDefaultRelays(["wss://nos.lol"]);
+  rxNostr.addDefaultRelays(["wss://nos.lol", "wss://relay.nostr.band"]);
 
   return rxNostr;
 };
