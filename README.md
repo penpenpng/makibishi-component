@@ -22,7 +22,7 @@ Put the following code into your pages `<head>`. Note that you need to change th
 Then, put the following code anywhere you want.
 
 ```html
-<makibishi-component relays="wss://nos.lol"></makibishi-component>
+<makibishi-component></makibishi-component>
 ```
 
 ## Customize behavior
