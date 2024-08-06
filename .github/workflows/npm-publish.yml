@@ -33,4 +33,3 @@ jobs:
         uses: ./.github/actions/publish-package
         with:
           version: ${{ steps.parse.outputs.version }}
-          # package: ${{ steps.parse.outputs.package }}
