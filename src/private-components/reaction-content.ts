@@ -7,11 +7,11 @@ interface Props {
   content: Content;
   positive: string;
   negative: string;
-  reactionSize: number;
+  customReactionSize: number;
 }
 
 export const ReactionContent = virtual(
-  ({ content, positive, negative, reactionSize }: Props) => {
+  ({ content, positive, negative, customReactionSize }: Props) => {
     switch (content.kind) {
       case "+":
         return html`<span part="reaction-content">${positive}</span>`;
@@ -26,8 +26,8 @@ export const ReactionContent = virtual(
             src=${content.src}
             title=${content.name}
             alt=${content.name}
-            width=${reactionSize}
-            height=${reactionSize}
+            width=${customReactionSize}
+            height=${customReactionSize}
         /></span>`;
 
       case "unknown":

@@ -12,7 +12,7 @@ interface Props {
   hideReactionContent: boolean;
   hideAvatar: boolean;
   avatarSize: number;
-  reactionSize: number;
+  customReactionSize: number;
   showNegativeReactions: boolean;
   positive: string;
   negative: string;
@@ -25,7 +25,7 @@ export const ReactionList = virtual(
     displayedReactions,
     hideReactionContent,
     hideAvatar,
-    reactionSize,
+    customReactionSize,
     avatarSize,
     showNegativeReactions,
     positive,
@@ -43,7 +43,7 @@ export const ReactionList = virtual(
                     content,
                     positive,
                     negative,
-                    reactionSize,
+                    customReactionSize,
                   })}${hideAvatar
                 ? nothing
                 : Avatar({ pubkey, relays, avatarSize })}

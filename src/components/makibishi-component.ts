@@ -30,10 +30,13 @@ export interface MakibishiComponentProps {
   hideReactionCounter?: boolean;
   /** If true, reaction contents and who made them are hidden. */
   hideReactionList?: boolean;
+  /** If true, emojis or custom reaction images are hidden. */
   hideReactionContent?: boolean;
+  /** If true, avatar images are hidden. */
   hideAvatar?: boolean;
+  /** Avatars' width and height. It will be set into <img>'s attribute. */
   avatarSize?: number;
-  reactionSize?: number;
+  /** Custom reactions' width and height. It will be set into <img>'s attribute. */
   customReactionSize?: number;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
@@ -62,7 +65,7 @@ const observedAttributes: Array<KebabCase<keyof MakibishiComponentProps>> = [
   "hide-reaction-content",
   "hide-avatar",
   "avatar-size",
-  "reaction-size",
+  "custom-reaction-size",
   "require-sign-extension",
   "force-anonymous",
   "custom-reaction-name",
@@ -87,7 +90,7 @@ export const MakibishiComponentElement = component(
       hideReactionContent,
       hideAvatar,
       avatarSize,
-      reactionSize,
+      customReactionSize,
       requireSignExtension,
       forceAnonymous,
       customReactionName,
@@ -108,7 +111,7 @@ export const MakibishiComponentElement = component(
       hideReactionContent: false,
       hideAvatar: false,
       avatarSize: 32,
-      reactionSize: 16,
+      customReactionSize: 16,
       requireSignExtension: false,
       forceAnonymous: false,
       customReactionName: "custom_reaction",
@@ -158,7 +161,7 @@ export const MakibishiComponentElement = component(
           hideReactionContent,
           hideAvatar,
           avatarSize,
-          reactionSize,
+          customReactionSize,
           showNegativeReactions,
           positive,
           negative,
