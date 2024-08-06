@@ -22,6 +22,7 @@
     "haunted": "^5.0.0",
     "lit": "^3.1.4",
     "nip07-awaiter": "^0.3.0",
+    "nostr-typedef": "^0.9.0",
     "rx-nostr": "^3.3.2",
     "rx-nostr-crypto": "^3.1.1"
   },
