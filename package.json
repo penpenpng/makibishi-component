@@ -1,8 +1,13 @@
 {
   "name": "makibishi-component",
-  "private": true,
+  "author": "penpenpng",
   "version": "0.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penpenpng/makibishi-component.git"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
