@@ -39,7 +39,7 @@ export const useReactions = ({
       until: live ? undefined : now,
       limit,
     });
-    if ("over" in req) {
+    if (!live && "over" in req) {
       req.over();
     }
 
