@@ -18,7 +18,7 @@ inputs:
     required: true
   package:
     description: Package name.
-    required: true
+    default: "."
 
 runs:
   using: composite
@@ -27,10 +27,10 @@ runs:
       uses: ./.github/actions/update-package-version
       with:
         version: ${{ inputs.version }}
-        package: packages/${{ inputs.package }}
-        commit_message_template: "version(${{ inputs.package }}): $VERSION"
-        tag_template: ${{ inputs.package }}@$VERSION
+        package: ${{ inputs.package }}
+        commit_message_template: "version: $VERSION"
+        tag_template: v$VERSION
         tag_force: true
     - name: npm publish
       shell: bash
-      run: npx -y can-npm-publish packages/${{ inputs.package }} && npm publish -w packages/${{ inputs.package }}
+      run: npx -y can-npm-publish ${{ inputs.package }} && npm publish -w ${{ inputs.package }}
