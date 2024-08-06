@@ -1,0 +1,10 @@
+_extends: makibishi-component:.github/release-drafter/base.yml
+
+header: https://www.npmjs.com/package/makibishi-component/v/$RESOLVED_VERSION
+
+name-template: v$RESOLVED_VERSION
+tag-template: v$RESOLVED_VERSION
+tag-prefix: v
+include-paths:
+  - src
+  - public
