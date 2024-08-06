@@ -16,12 +16,16 @@ makibishi-component::part(button) {
   border-radius: 8px 0 0 8px;
 }
 
-makibishi-component::part(button):hover {
+makibishi-component::part(button):not(:disabled):hover {
   background-color: #dceeff;
 }
 
-makibishi-component::part(button):active {
+makibishi-component::part(button):not(:disabled):active {
   background-color: #bdd4e9;
+}
+
+makibishi-component::part(button):disabled {
+  background-color: #cecece;
 }
 
 makibishi-component::part(counter) {
