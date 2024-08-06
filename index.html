@@ -4,20 +4,42 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Makibishi Component Demo</title>
+    <title>makibishi-component demo</title>
     <script type="module" src="/src/index.ts"></script>
     <link rel="stylesheet" href="/reset.css" />
-    <link rel="stylesheet" href="/src/index.css" />
+    <link rel="stylesheet" href="/default-theme.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+    />
   </head>
   <body>
-    <makibishi-component
-      relays="wss://nos.lol;wss://yabu.me"
-      url="https://nikolat.github.io/makibishi-demo/"
-      displayed-reactions="10"
-      disable-url-normalization
-      reaction="❤"
-      limit="50"
-    >
-    </makibishi-component>
+    <header>
+      <h1>makibishi-component demo</h1>
+      <makibishi-component
+        relays="wss://nos.lol"
+        displayed-reactions="10"
+      ></makibishi-component>
+    </header>
+
+    <p>
+      <code>makibishi-component</code> is an implementation of
+      <a href="https://nikolat.github.io/makibishi-demo/">MAKIBISHI</a>
+      with
+      <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components"
+        >Web Component</a
+      >. By placing this on your page, the page will be able to receive emoji
+      reactions from any user.
+    </p>
+    <p>
+      Because it is on <a href="https://nostr.com/">Nostr protocol</a>, if a
+      user visiting the page is a Nostr user, you can also know the identity of
+      the user who reacted. However, it is not at all essential that the
+      end-user be a Nostr user.
+    </p>
+
+    <h2>Installation</h2>
+
+    <h2>Customize</h2>
   </body>
 </html>
