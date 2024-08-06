@@ -57,7 +57,12 @@ export const ReactionButton = virtual(
       setProcessing(true);
 
       try {
-        const reaction = await react({ relays, url, content });
+        const reaction = await react({
+          relays,
+          url,
+          content,
+          requireSignExtension,
+        });
         if (reaction) {
           onSuccess?.(reaction);
         }

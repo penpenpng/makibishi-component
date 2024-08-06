@@ -11,11 +11,14 @@ import { bech32 } from "@scure/base";
 
 const Bech32MaxSize = 5000;
 
-export function npubEncode(hex: string): `npub1${string}` {
-  return encodeBytes("npub", hexToBytes(hex));
+export function encode<Prefix extends "npub" | "nsec">(
+  prefix: Prefix,
+  hex: string,
+): `${Prefix}1${string}` {
+  return encodeBytes(prefix, hexToBytes(hex));
 }
 
-function encodeBytes<Prefix extends string>(
+export function encodeBytes<Prefix extends string>(
   prefix: Prefix,
   bytes: Uint8Array,
 ): `${Prefix}1${string}` {

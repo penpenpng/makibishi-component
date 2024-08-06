@@ -7,6 +7,7 @@ interface ClientWithRefCount {
 
 interface MakibishiComponentGlobalState {
   clientWithRef?: ClientWithRefCount;
+  disposableSeckey?: string;
 }
 
 declare global {

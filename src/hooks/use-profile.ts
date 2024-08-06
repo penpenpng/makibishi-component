@@ -3,14 +3,14 @@ import * as Nostr from "nostr-typedef";
 import { createRxBackwardReq, type EventPacket, latest, now } from "rx-nostr";
 import { filter, map } from "rxjs";
 
-import { npubEncode } from "../lib/npub-encode.ts";
+import { encode } from "../lib/bech-encode.ts";
 import { getReadRelays } from "../lib/target-relays.ts";
 import { useNostrClient } from "./use-client.ts";
 
 export interface UserProfile {
   name: string;
   avatar: string | null;
-  page: string;
+  page?: string;
 }
 
 export interface UseProfileParams {
@@ -18,9 +18,17 @@ export interface UseProfileParams {
   relays: string[];
 }
 
+const getDefaultName = () => "anonymous";
+
+const getDefaultAvatar = (pubkey: string) =>
+  `https://robohash.org/${pubkey}.png`;
+
 export const useProfile = ({ pubkey, relays }: UseProfileParams) => {
   const client = useNostrClient();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile>({
+    avatar: getDefaultAvatar(pubkey),
+    name: getDefaultName(),
+  });
 
   useEffect(() => {
     const req = createRxBackwardReq();
@@ -59,9 +67,9 @@ function toUserProfile({ event }: EventPacket): UserProfile | null {
         profile.username ??
         profile.display_name ??
         profile.displayName ??
-        "anonymous",
-      avatar: profile.picture ?? null,
-      page: `https://njump.me/${npubEncode(event.pubkey)}`,
+        getDefaultName(),
+      avatar: profile.picture ?? getDefaultAvatar(event.pubkey),
+      page: `https://njump.me/${encode("npub", event.pubkey)}`,
     };
   } catch {
     return null;

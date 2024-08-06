@@ -1,30 +1,34 @@
 import { useCallback } from "haunted";
 import { getNostr } from "nip07-awaiter";
 import * as Nostr from "nostr-typedef";
-import { nip07Signer } from "rx-nostr";
+import { type EventSigner, nip07Signer } from "rx-nostr";
 import { filter } from "rxjs";
 
 import { Reaction, ReactionContent, toReaction } from "../lib/reaction.ts";
 import { getWriteRelays } from "../lib/target-relays.ts";
+import { useAnonymousSigner } from "./use-anonymous-signer.ts";
 import { useNostrClient } from "./use-client.ts";
 
 export interface ReactParams {
   relays: string[];
   url: string;
   content: ReactionContent;
+  requireSignExtension: boolean;
 }
 
 export const useReact = () => {
   const client = useNostrClient();
+  const anonymousSigner = useAnonymousSigner();
+  const extensionSigner = nip07Signer();
 
   return useCallback(
     async ({
       url,
       content,
       relays,
+      requireSignExtension,
     }: ReactParams): Promise<Reaction | undefined> => {
-      const nostr = getNostr();
-      if (content.kind === "unknown" || !nostr) {
+      if (content.kind === "unknown") {
         return;
       }
 
@@ -50,9 +54,9 @@ export const useReact = () => {
           break;
       }
 
-      return Promise.race([
+      const sendReactionWith = (signer: EventSigner) =>
         new Promise<Reaction | undefined>((resolve) => {
-          nip07Signer()
+          signer
             .signEvent(params)
             .then((event) => {
               client
@@ -65,11 +69,27 @@ export const useReact = () => {
             .catch(() => {
               resolve(undefined);
             });
-        }),
-        new Promise<undefined>((resolve) =>
-          setTimeout(() => resolve(undefined), 5000),
-        ),
-      ]);
+        });
+
+      if (requireSignExtension) {
+        if (!getNostr()) {
+          // No extension.
+          return;
+        }
+
+        return Promise.race([
+          sendReactionWith(extensionSigner),
+          new Promise<undefined>((resolve) =>
+            setTimeout(() => resolve(undefined), 5000),
+          ),
+        ]);
+      } else {
+        if (getNostr()) {
+          return sendReactionWith(extensionSigner);
+        } else {
+          return sendReactionWith(anonymousSigner);
+        }
+      }
     },
     [],
   );
