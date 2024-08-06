@@ -7,7 +7,9 @@ const entry = (name: string) => path.resolve(import.meta.dirname, "src", name);
 export default defineConfig(({ mode }) => {
   switch (mode) {
     case "pages":
-      return {};
+      return {
+        base: "/makibishi-component/",
+      };
     default:
       return {
         build: {
