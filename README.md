@@ -45,8 +45,8 @@ Then, put the following code anywhere you want.
   <dt>limit</dt>
   <dd>`limit` filter parameter to be sent to relays.</dd>
 
-  <dt>If set, the reactions will be updated in real-time. For performance reasons, it is off by default.</dt>
-  <dd>live</dd>
+  <dt>live</dt>
+  <dd>If set, the reactions will be updated in real-time. For performance reasons, it is off by default.</dd>
 
   <dt>disable-url-normalization</dt>
   <dd>If set, the URL will not be normalized automatically. Usually you shouldn't do this.</dd>
