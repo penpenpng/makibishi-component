@@ -16,6 +16,9 @@ const createClient = () => {
     verifier,
   });
 
+  // Fallback relay
+  rxNostr.addDefaultRelays(["wss://nos.lol"]);
+
   waitNostr(10000).then(async (nostr) => {
     if (!isAlive(rxNostr)) {
       return;
