@@ -6,9 +6,10 @@ import { virtual } from "../lib/virtual.ts";
 interface Props {
   relays: string[];
   pubkey: string;
+  avatarSize: number;
 }
 
-export const Avatar = virtual(({ pubkey, relays }: Props) => {
+export const Avatar = virtual(({ pubkey, relays, avatarSize }: Props) => {
   const profile = useProfile({ pubkey, relays });
   if (!profile?.avatar) {
     return nothing;
@@ -16,7 +17,14 @@ export const Avatar = virtual(({ pubkey, relays }: Props) => {
 
   const alt = `Profile page of ${profile.name}.`;
 
-  return html`<a part="avatar" href=${profile.page} target="_blank">
-    <img src=${profile.avatar} alt=${alt} width="64" height="64" />
+  return html`<a part="avatar-link" href=${profile.page} target="_blank">
+    <img
+      part="avatar"
+      src=${profile.avatar}
+      alt=${alt}
+      title=${profile.name ?? undefined}
+      width=${avatarSize}
+      height=${avatarSize}
+    />
   </a>`;
 });

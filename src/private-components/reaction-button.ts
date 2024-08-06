@@ -50,7 +50,8 @@ export const ReactionButton = virtual(
     const disabled = processing || (requireSignExtension && !extension);
 
     const performReact = async () => {
-      // for aria-disabled
+      return;
+
       if (disabled) {
         return;
       }
@@ -67,14 +68,13 @@ export const ReactionButton = virtual(
       }
     };
 
-    return html`<slot
-      name="button"
-      aria-disabled=${disabled ? "true" : undefined}
+    return html`<button
+      part="button"
+      aria-label=${buttonLabel}
+      ?disabled=${disabled}
       @click=${performReact}
     >
-      <button part="button" aria-label=${buttonLabel} ?disabled=${disabled}>
-        default
-      </button>
-    </slot>`;
+      <slot name="button">👍</slot>
+    </button>`;
   },
 );

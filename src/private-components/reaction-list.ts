@@ -9,6 +9,10 @@ interface Props {
   relays: string[];
   reactions: Reaction[];
   displayedReactions: number;
+  hideReactionContent: boolean;
+  hideAvatar: boolean;
+  avatarSize: number;
+  reactionSize: number;
   showNegativeReactions: boolean;
   positive: string;
   negative: string;
@@ -19,6 +23,10 @@ export const ReactionList = virtual(
     relays,
     reactions,
     displayedReactions,
+    hideReactionContent,
+    hideAvatar,
+    reactionSize,
+    avatarSize,
     showNegativeReactions,
     positive,
     negative,
@@ -29,16 +37,25 @@ export const ReactionList = virtual(
         !showNegativeReactions && content.kind === "-"
           ? nothing
           : html`<div part="reaction">
-              ${ReactionContent({ content, positive, negative })},
-              ${Avatar({ pubkey, relays })}
+              ${hideReactionContent
+                ? nothing
+                : ReactionContent({
+                    content,
+                    positive,
+                    negative,
+                    reactionSize,
+                  })}${hideAvatar
+                ? nothing
+                : Avatar({ pubkey, relays, avatarSize })}
             </div>`,
       )}`;
 
     const ellipsis =
       reactions.length > displayedReactions
-        ? html`<span part="ellipsis">...</span>`
+        ? html`<span part="ellipsis"><slot name="ellipsis">...</slot></span>`
         : nothing;
 
-    return html`<div part="reaction-list">${list}${ellipsis}</div>`;
+    return html`<div part="reaction-list">${list}</div>
+      ${ellipsis}`;
   },
 );

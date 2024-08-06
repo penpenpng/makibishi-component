@@ -30,6 +30,11 @@ export interface MakibishiComponentProps {
   hideReactionCounter?: boolean;
   /** If true, reaction contents and who made them are hidden. */
   hideReactionList?: boolean;
+  hideReactionContent?: boolean;
+  hideAvatar?: boolean;
+  avatarSize?: number;
+  reactionSize?: number;
+  customReactionSize?: number;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
@@ -53,6 +58,10 @@ const observedAttributes: Array<KebabCase<keyof MakibishiComponentProps>> = [
   "hide-reaction-button",
   "hide-reaction-counter",
   "hide-reaction-list",
+  "hide-reaction-content",
+  "hide-avatar",
+  "avatar-size",
+  "reaction-size",
   "require-sign-extension",
   "custom-reaction-name",
   "show-negative-reactions",
@@ -73,6 +82,10 @@ export const MakibishiComponentElement = component(
       hideReactionButton,
       hideReactionCounter,
       hideReactionList,
+      hideReactionContent,
+      hideAvatar,
+      avatarSize,
+      reactionSize,
       requireSignExtension,
       customReactionName,
       showNegativeReactions,
@@ -89,6 +102,10 @@ export const MakibishiComponentElement = component(
       hideReactionButton: false,
       hideReactionCounter: false,
       hideReactionList: false,
+      hideReactionContent: false,
+      hideAvatar: false,
+      avatarSize: 32,
+      reactionSize: 16,
       requireSignExtension: false,
       customReactionName: "custom_reaction",
       showNegativeReactions: false,
@@ -125,16 +142,18 @@ export const MakibishiComponentElement = component(
           customReactionName,
           urlPostProcess,
           onSuccess: live ? undefined : pushReaction,
-        })}
-    ${hideReactionCounter
+        })}${hideReactionCounter
       ? nothing
-      : ReactionCounter({ count: reactions.length })}
-    ${hideReactionList
+      : ReactionCounter({ count: reactions.length })}${hideReactionList
       ? nothing
       : ReactionList({
           relays,
           reactions,
           displayedReactions,
+          hideReactionContent,
+          hideAvatar,
+          avatarSize,
+          reactionSize,
           showNegativeReactions,
           positive,
           negative,
