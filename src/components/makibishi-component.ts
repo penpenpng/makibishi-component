@@ -37,6 +37,7 @@ export interface MakibishiComponentProps {
   customReactionSize?: number;
   /** By default, when the user doesn't have NIP-07 extension, they react as an anonymous. But if the option is enabled, NIP-07 extension is required to send reaction. */
   requireSignExtension?: boolean;
+  forceAnonymous?: boolean;
   /** If `reaction` attribute is URL, this is used to the custom reaction's name like `:star:`. Note that no colon is required. */
   customReactionName?: string;
   /** If true, negative reaction ('-') is allowed to be listed. */
@@ -63,6 +64,7 @@ const observedAttributes: Array<KebabCase<keyof MakibishiComponentProps>> = [
   "avatar-size",
   "reaction-size",
   "require-sign-extension",
+  "force-anonymous",
   "custom-reaction-name",
   "show-negative-reactions",
   "positive",
@@ -87,6 +89,7 @@ export const MakibishiComponentElement = component(
       avatarSize,
       reactionSize,
       requireSignExtension,
+      forceAnonymous,
       customReactionName,
       showNegativeReactions,
       positive,
@@ -107,6 +110,7 @@ export const MakibishiComponentElement = component(
       avatarSize: 32,
       reactionSize: 16,
       requireSignExtension: false,
+      forceAnonymous: false,
       customReactionName: "custom_reaction",
       showNegativeReactions: false,
       positive: "👍",
@@ -139,6 +143,7 @@ export const MakibishiComponentElement = component(
           url,
           reaction,
           requireSignExtension,
+          forceAnonymous,
           customReactionName,
           urlPostProcess,
           onSuccess: live ? undefined : pushReaction,

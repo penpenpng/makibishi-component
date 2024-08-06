@@ -14,6 +14,7 @@ export interface ReactParams {
   url: string;
   content: ReactionContent;
   requireSignExtension: boolean;
+  forceAnonymous: boolean;
 }
 
 export const useReact = () => {
@@ -27,6 +28,7 @@ export const useReact = () => {
       content,
       relays,
       requireSignExtension,
+      forceAnonymous,
     }: ReactParams): Promise<Reaction | undefined> => {
       if (content.kind === "unknown") {
         return;
@@ -71,7 +73,9 @@ export const useReact = () => {
             });
         });
 
-      if (requireSignExtension) {
+      if (forceAnonymous) {
+        return sendReactionWith(anonymousSigner);
+      } else if (requireSignExtension) {
         if (!getNostr()) {
           // No extension.
           return;

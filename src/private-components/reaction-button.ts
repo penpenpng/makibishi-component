@@ -13,6 +13,7 @@ interface Props {
   reaction: string;
   customReactionName: string;
   requireSignExtension: boolean;
+  forceAnonymous: boolean;
   urlPostProcess: (url: string) => string;
   onSuccess?: (reaction: Reaction) => void;
 }
@@ -24,6 +25,7 @@ export const ReactionButton = virtual(
     reaction,
     customReactionName,
     requireSignExtension,
+    forceAnonymous,
     urlPostProcess,
     onSuccess,
   }: Props) => {
@@ -62,6 +64,7 @@ export const ReactionButton = virtual(
           url,
           content,
           requireSignExtension,
+          forceAnonymous,
         });
         if (reaction) {
           onSuccess?.(reaction);
