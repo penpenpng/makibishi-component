@@ -1,15 +1,8 @@
 import { useEffect, useMemo } from "haunted";
-import { waitNostr } from "nip07-awaiter";
 import { createRxNostr, type RxNostr } from "rx-nostr";
 import { verifier } from "rx-nostr-crypto";
 
 import { getGlobalState } from "../lib/global-state.ts";
-
-const isAlive = (client: RxNostr) => {
-  const state = getGlobalState();
-
-  return state.clientWithRef?.client === client;
-};
 
 const createClient = () => {
   const rxNostr = createRxNostr({
@@ -18,17 +11,6 @@ const createClient = () => {
 
   // Fallback relay
   rxNostr.addDefaultRelays(["wss://nos.lol"]);
-
-  waitNostr(10000).then(async (nostr) => {
-    if (!isAlive(rxNostr)) {
-      return;
-    }
-    const relays = await nostr?.getRelays?.();
-
-    if (isAlive(rxNostr) && relays) {
-      rxNostr.addDefaultRelays(relays);
-    }
-  });
 
   return rxNostr;
 };
